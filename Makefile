@@ -1,6 +1,6 @@
 PHP := php
 
-install: build up composer-update node-install init
+install: build up init composer-install node-install
 
 help:
 	@echo 'Youhou'
