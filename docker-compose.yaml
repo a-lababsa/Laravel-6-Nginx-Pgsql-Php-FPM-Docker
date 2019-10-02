@@ -1,0 +1,45 @@
+version: '3.3'
+services:
+  pgsql:
+    build: ./docker/postgres
+    restart: always
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'laravel'
+    volumes:
+      - ./docker/postgres_data:/var/lib/postgresql/data
+    networks:
+      - default
+  php:
+    build: ./docker/php-fpm
+    ports:
+      - "9001:9001"
+    volumes:
+      - ./:/var/www/app
+    networks:
+      - default
+    links:
+      - pgsql
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - "80:80"
+    links:
+      - php
+    volumes:
+      - ./logs/nginx:/var/log/nginx:cached
+      - ./:/var/www/app
+    depends_on:
+      - php
+      - pgsql
+    restart: always
+  node:
+    build: ./docker/node
+    volumes:
+      - ./:/var/www/app
+networks:
+  default:
+    driver: bridge
