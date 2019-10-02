@@ -3,6 +3,7 @@ services:
   pgsql:
     build: ./docker/postgres
     restart: always
+    container_name: pgsql
     ports:
       - '5433:5432'
     environment:
@@ -16,9 +17,9 @@ services:
   php:
     build: ./docker/php-fpm
     ports:
-      - "9001:9001"
+      - "9000:9000"
     volumes:
-      - ./:/var/www/app
+      - ./:/app
     networks:
       - default
     links:
@@ -31,7 +32,7 @@ services:
       - php
     volumes:
       - ./logs/nginx:/var/log/nginx:cached
-      - ./:/var/www/app
+      - ./:/app
     depends_on:
       - php
       - pgsql
@@ -39,7 +40,7 @@ services:
   node:
     build: ./docker/node
     volumes:
-      - ./:/var/www/app
+      - ./:/app
 networks:
   default:
     driver: bridge

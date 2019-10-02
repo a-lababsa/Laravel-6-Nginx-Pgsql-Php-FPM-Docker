@@ -1,13 +1,7 @@
-FROM alpine:3.8
+FROM nginx:1.15.8-alpine
 
-RUN apk add --update nginx
-RUN rm -rf /var/cache/apk/* && rm -rf /tmp/*
+WORKDIR /app
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
-ADD nginx.conf /etc/nginx/
-ADD default.conf /etc/nginx/conf.d/
-
-RUN adduser -D -g '' -G www-data www-data
-
-CMD ["nginx"]
-
-EXPOSE 80
+RUN chmod go+x /app
