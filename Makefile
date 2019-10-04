@@ -1,6 +1,15 @@
 PHP := php
 
-install: build up init composer-install node-install
+.PHONY: install
+install: clean build up init /
+	cp .env.example .env
+	@docker-compose exec $(PHP) composer global require hirak/prestissimo
+	$(MAKE) composer-install
+	@docker-compose exec $(PHP) php artisan key:generate
+	$(MAKE) node-install
+
+clean:
+	@sh ./clean.sh
 
 help:
 	@echo 'Youhou'
@@ -19,23 +28,20 @@ restart:
 shell:
 	@docker-compose exec php sh
 
-.PHONY: composer-update
 composer-update:
 	@docker-compose exec $(PHP) composer update --prefer-dist
 
-.PHONY: composer-install
 composer-install:
 	@docker-compose exec $(PHP) composer install --prefer-dist
 
-.PHONY: node-install
 node-install:
 	@docker-compose run --rm node yarn install
 
 asset:
-	@docker-compose run node yarn run assets
+	@docker-compose run --rm node yarn run assets
 
-node:
-	@docker-compose run node
+node-sh:
+	@docker-compose run --rm node sh
 
 build:
 	$(info Make: Building images.)

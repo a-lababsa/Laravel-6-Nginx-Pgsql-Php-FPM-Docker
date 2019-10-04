@@ -1,0 +1,1 @@
+sudo rm -rf vendor/ .env logs/ node_modules/ composer.lock yarn.lock storage/
