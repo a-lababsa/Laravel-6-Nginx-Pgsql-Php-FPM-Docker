@@ -12,7 +12,20 @@ clean:
 	@sh ./clean.sh
 
 help:
-	@echo 'Youhou'
+	@echo ""
+	@echo "make install          ; install the project"
+	@echo "make clean            ; clean project"
+	@echo "make up               ; run project"
+	@echo "make stop             ; stop project"
+	@echo "make build            ; build project"
+	@echo "make shell            ; build and start interactive shell in php containers"
+	@echo "make composer-install ; run composer-install inside containers"
+	@echo "make composer-update  ; run composer-update inside containers"
+	@echo "make asset            ; build and install javascript modules"
+	@echo "make node-sh          ; build and start interactive shell in node containers"
+	@echo "make build            ; run docker-compose build"
+	@echo "make down             ; run docker-compose down"
+	@echo ""
 
 up:
 	@docker-compose up -d nginx
@@ -44,7 +57,6 @@ node-sh:
 	@docker-compose run --rm node sh
 
 build:
-	$(info Make: Building images.)
 	docker-compose build
 
 down:
